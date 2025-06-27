@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 from bs4 import BeautifulSoup
 from IPython.display import Markdown, display
 from groq import Groq
+import gradio as gr
 
 load_dotenv(override=True)
 groq = Groq()
@@ -124,3 +125,12 @@ class WebsiteSummarizer:
                 "title": "",
                 "url": clean_url
             }
+
+def summarize_website_chatbot(message, history):
+    url = message
+    summarizer = WebsiteSummarizer()
+    result = summarizer.summarize(url)
+    if result["success"]:
+        return f"**Title:** {result['title']}\n\n**Summary:**\n{result['summary']}"
+    else:
+        return f"**Error:** {result['error']}"
